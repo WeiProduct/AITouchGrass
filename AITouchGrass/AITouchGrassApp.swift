@@ -10,23 +10,37 @@ import SwiftData
 
 @main
 struct AITouchGrassApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    // Service container
+    @MainActor
+    private let serviceContainer = ServiceContainer.shared
+    
+    // App coordinator
+    @StateObject private var appCoordinator: AppCoordinator
+    @State private var showLaunchScreen = true
+    
+    @MainActor
+    init() {
+        // Initialize app coordinator
+        let coordinator = AppCoordinator(serviceContainer: ServiceContainer.shared)
+        _appCoordinator = StateObject(wrappedValue: coordinator)
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if showLaunchScreen {
+                LaunchScreen()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                            withAnimation(.easeOut(duration: 0.5)) {
+                                showLaunchScreen = false
+                            }
+                        }
+                    }
+            } else {
+                AppRootView(coordinator: appCoordinator)
+                    .transition(.opacity)
+            }
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(serviceContainer.modelContainer)
     }
 }

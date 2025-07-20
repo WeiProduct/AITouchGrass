@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+</head>
+<body>
+    <h1>Test Page</h1>
+    <p>If you can see the favicon in the browser tab, icons are working!</p>
+    <p>Current time: <span id="time"></span></p>
+    <h2>Icon Test:</h2>
+    <img src="images/favicon-32x32.png" alt="32x32 icon" style="border: 1px solid #ccc;">
+    <img src="images/apple-touch-icon.png" alt="180x180 icon" style="border: 1px solid #ccc; width: 180px;">
+    
+    <h2>Language Script Test:</h2>
+    <button onclick="testLang()">Test Language Function</button>
+    <div id="result"></div>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        
+        // Test if lang.js is loaded
+        function testLang() {
+            if (typeof translations !== 'undefined') {
+                document.getElementById('result').textContent = 'Lang.js loaded successfully! Translations available.';
+            } else {
+                document.getElementById('result').textContent = 'Lang.js NOT loaded!';
+            }
+        }
+    </script>
+    <script src="lang.js"></script>
+</body>
+</html>

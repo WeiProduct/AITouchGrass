@@ -153,16 +153,34 @@ function setLanguage(lang) {
     }
 }
 
+// Function to bind language toggle events
+function bindLanguageToggle() {
+    // Find all language toggle buttons (including in mobile menu)
+    document.querySelectorAll('#langToggle, .lang-btn').forEach(btn => {
+        // Remove existing listeners to avoid duplicates
+        btn.replaceWith(btn.cloneNode(true));
+    });
+    
+    // Re-bind events to all language toggle buttons
+    document.querySelectorAll('#langToggle, .lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const newLang = currentLang === 'zh' ? 'en' : 'zh';
+            setLanguage(newLang);
+        });
+    });
+}
+
 // Initialize language on page load
 document.addEventListener('DOMContentLoaded', () => {
     setLanguage(currentLang);
     
-    // Language toggle button
-    const langToggle = document.getElementById('langToggle');
-    if (langToggle) {
-        langToggle.addEventListener('click', () => {
-            const newLang = currentLang === 'zh' ? 'en' : 'zh';
-            setLanguage(newLang);
-        });
-    }
+    // Wait a bit for script.js to create mobile menu
+    setTimeout(() => {
+        bindLanguageToggle();
+    }, 100);
+});
+
+// Also bind when window loads completely
+window.addEventListener('load', () => {
+    bindLanguageToggle();
 });

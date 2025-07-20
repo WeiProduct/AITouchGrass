@@ -6,7 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create mobile menu
     const mobileMenu = document.createElement('div');
     mobileMenu.className = 'mobile-menu';
-    mobileMenu.innerHTML = navMenu.innerHTML;
+    // Clone nodes instead of innerHTML to preserve event listeners
+    navMenu.childNodes.forEach(node => {
+        if (node.nodeType === 1) { // Element node
+            mobileMenu.appendChild(node.cloneNode(true));
+        }
+    });
     document.querySelector('.navbar').appendChild(mobileMenu);
     
     navToggle.addEventListener('click', function() {

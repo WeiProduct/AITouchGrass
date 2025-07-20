@@ -10,9 +10,11 @@ import Combine
 
 struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
+    @StateObject private var localizationManager = LocalizationManager.shared
     @State private var refreshSubject = PassthroughSubject<Void, Never>()
     @State private var quickActionSubject = PassthroughSubject<QuickAction, Never>()
     @State private var activityDetailSubject = PassthroughSubject<Activity, Never>()
+    @State private var showingSettings = false
     
     init(viewModel: HomeViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -48,17 +50,28 @@ struct HomeView: View {
             .padding(.bottom, 50) // Add padding for tab bar
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle("AITouchGrass")
+        .navigationTitle(L("AITouchGrass"))
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    refreshSubject.send()
-                }) {
-                    Image(systemName: "arrow.clockwise")
+                HStack(spacing: 16) {
+                    Button(action: {
+                        showingSettings = true
+                    }) {
+                        Image(systemName: "gearshape")
+                    }
+                    
+                    Button(action: {
+                        refreshSubject.send()
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                    .disabled(viewModel.isRefreshing)
                 }
-                .disabled(viewModel.isRefreshing)
             }
+        }
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
         }
         .refreshable {
             refreshSubject.send()
@@ -92,7 +105,7 @@ struct WeatherCard: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 8) {
-                Text("Today's Weather")
+                Text(L("今日天气"))
                     .font(.headline)
                     .foregroundColor(.secondary)
                 
@@ -120,32 +133,32 @@ struct StatsOverviewView: View {
         VStack(spacing: 16) {
             HStack(spacing: 16) {
                 HomeStatCard(
-                    title: "Today",
+                    title: L("今日"),
                     value: "\(data.todayActivities)",
-                    subtitle: "Activities",
+                    subtitle: L("活动"),
                     systemImage: "figure.walk"
                 )
                 
                 HomeStatCard(
-                    title: "Streak",
+                    title: L("连续"),
                     value: "\(data.currentStreak)",
-                    subtitle: "Days",
+                    subtitle: L("天"),
                     systemImage: "flame.fill"
                 )
             }
             
             HStack(spacing: 16) {
                 HomeStatCard(
-                    title: "Outdoor Time",
+                    title: L("户外时间"),
                     value: formatTime(data.totalOutdoorTime),
-                    subtitle: "Today",
+                    subtitle: L("今日"),
                     systemImage: "clock.fill"
                 )
                 
                 HomeStatCard(
-                    title: "Weekly Goal",
+                    title: L("周目标"),
                     value: "\(Int(data.weeklyGoalProgress * 100))%",
-                    subtitle: "Complete",
+                    subtitle: L("完成"),
                     systemImage: "target"
                 )
             }
@@ -232,7 +245,7 @@ struct QuickActionsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Start")
+            Text(L("快速开始"))
                 .font(.headline)
             
             HStack(spacing: 12) {
@@ -268,13 +281,13 @@ struct QuickActionButton: View {
     var actionName: String {
         switch action {
         case .startWalk:
-            return "步行"
+            return L("步行")
         case .startRun:
-            return "跑步"
+            return L("跑步")
         case .startCycle:
-            return "骑行"
+            return L("骑行")
         case .startCustom:
-            return "自定义"
+            return L("自定义")
         }
     }
     
@@ -326,11 +339,11 @@ struct RecentActivitiesView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Recent Activities")
+            Text(L("最近活动"))
                 .font(.headline)
             
             if activities.isEmpty {
-                Text("No activities yet. Start your first outdoor activity!")
+                Text(L("还没有活动记录。开始你的第一次户外活动吧！"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .padding()

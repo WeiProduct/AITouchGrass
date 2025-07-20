@@ -6,6 +6,7 @@ import AVFoundation
 
 struct TouchGrassView: View {
     @StateObject var viewModel: TouchGrassViewModel
+    @StateObject private var localizationManager = LocalizationManager.shared
     @State private var toggleBlockingSubject = PassthroughSubject<Void, Never>()
     @State private var selectAppsSubject = PassthroughSubject<Void, Never>()
     @State private var verifyGrassSubject = PassthroughSubject<UIImage, Never>()
@@ -87,13 +88,13 @@ struct TouchGrassView: View {
                 .padding(.bottom, 50) // Add extra padding for tab bar
             }
         }
-        .navigationTitle("专注")
+        .navigationTitle(L("专注"))
         .navigationBarTitleDisplayMode(.large)
         .sheet(isPresented: $showingImagePicker) {
             CameraView(image: $selectedImage, isPresented: $showingImagePicker)
         }
-        .alert("提示", isPresented: $showErrorAlert) {
-            Button("确定") {
+        .alert(L("提示"), isPresented: $showErrorAlert) {
+            Button(L("确定")) {
                 viewModel.errorMessage = nil
                 showErrorAlert = false
             }
@@ -203,15 +204,15 @@ struct TouchGrassView: View {
                     .foregroundColor(.blue)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("演示模式")
+                    Text(L("演示模式"))
                         .font(.headline)
                     
                     #if targetEnvironment(simulator)
-                    Text("当前在模拟器中运行，使用演示模式")
+                    Text(L("当前在模拟器中运行，使用演示模式"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     #else
-                    Text("Family Controls API 不可用，使用演示模式")
+                    Text(L("Family Controls API 不可用，使用演示模式"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     #endif
@@ -221,14 +222,14 @@ struct TouchGrassView: View {
             }
             
             VStack(alignment: .leading, spacing: 6) {
-                Text("• 应用阻塞功能为模拟效果（仅发送通知提醒）")
+                Text("• " + L("应用阻塞功能为模拟效果（仅发送通知提醒）"))
                 #if targetEnvironment(simulator)
-                Text("• 在真机上可获得完整功能")
-                Text("• 需要iOS设备和开发者账号")
+                Text("• " + L("在真机上可获得完整功能"))
+                Text("• " + L("需要iOS设备和开发者账号"))
                 #else
-                Text("• Family Controls需要特殊Apple权限")
-                Text("• 需要申请Screen Time entitlement")
-                Text("• 当前使用演示模式进行体验")
+                Text("• " + L("Family Controls需要特殊Apple权限"))
+                Text("• " + L("需要申请Screen Time entitlement"))
+                Text("• " + L("当前使用演示模式进行体验"))
                 #endif
             }
             .font(.caption)
@@ -252,10 +253,10 @@ struct TouchGrassView: View {
                     .foregroundColor(.orange)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("需要授权")
+                    Text(L("需要授权"))
                         .font(.headline)
                     
-                    Text("使用此功能需要屏幕使用时间权限")
+                    Text(L("使用此功能需要屏幕使用时间权限"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -270,7 +271,7 @@ struct TouchGrassView: View {
             }) {
                 HStack {
                     Image(systemName: "shield.checkered")
-                    Text("授权屏幕使用时间")
+                    Text(L("授权屏幕使用时间"))
                 }
                 .font(.subheadline)
                 .fontWeight(.medium)
@@ -301,7 +302,7 @@ struct TouchGrassView: View {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("锁定状态")
+                    Text(L("锁定状态"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
@@ -310,7 +311,7 @@ struct TouchGrassView: View {
                             .fill(viewModel.isBlocking ? Color.red : Color.green)
                             .frame(width: 12, height: 12)
                         
-                        Text(viewModel.isBlocking ? "已启用" : "未启用")
+                        Text(viewModel.isBlocking ? L("已启用") : L("未启用"))
                             .font(.headline)
                     }
                 }
@@ -327,7 +328,7 @@ struct TouchGrassView: View {
             
             if let remainingTime = viewModel.remainingUnlockTime, remainingTime > 0 {
                 VStack(spacing: 8) {
-                    Text("临时解锁剩余时间")
+                    Text(L("临时解锁剩余时间"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
@@ -342,7 +343,7 @@ struct TouchGrassView: View {
             // 如果未授权，显示授权按钮（仅限真实服务）
             if !viewModel.isAuthorized && !viewModel.isUsingMockService {
                 VStack(spacing: 8) {
-                    Text("需要屏幕使用时间权限")
+                    Text(L("需要屏幕使用时间权限"))
                         .font(.caption)
                         .foregroundColor(.orange)
                     
@@ -351,7 +352,7 @@ struct TouchGrassView: View {
                             await viewModel.requestScreenTimeAuthorization()
                         }
                     }) {
-                        Text("立即授权")
+                        Text(L("立即授权"))
                             .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.white)
@@ -373,13 +374,13 @@ struct TouchGrassView: View {
     private var blockedContentSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("锁定的内容")
+                Text(L("锁定的内容"))
                     .font(.headline)
                 
                 Spacer()
                 
                 let totalCount = familySelection.applicationTokens.count + familySelection.categoryTokens.count + viewModel.selectedApps.count
-                Text("\(totalCount) 项")
+                Text("\(totalCount) " + L("项"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -387,7 +388,7 @@ struct TouchGrassView: View {
             // 显示选择的应用 (RealAppBlockingService)
             if !viewModel.selectedApps.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("选择的应用")
+                    Text(L("选择的应用"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     

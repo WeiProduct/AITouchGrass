@@ -1,0 +1,3 @@
+# Disable Jekyll processing
+markdown: GFM
+plugins: []

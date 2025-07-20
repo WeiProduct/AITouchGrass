@@ -1,95 +1,38 @@
-# AITouchGrass - 户外活动追踪应用
+# AITouchGrass Website
 
-一个使用 SwiftUI 和 MVVM-C 架构构建的 iOS 户外活动追踪应用。
+AITouchGrass 官方网站 / Official Website
 
-## 功能特性
+🌐 **访问网站 / Visit**: https://weiproduct.github.io/AITouchGrass/
 
-- 🏃‍♂️ **活动追踪** - 支持多种运动类型的实时追踪
-- 📍 **GPS定位** - 记录运动轨迹和实时位置
-- 📊 **数据统计** - 详细的活动数据分析和图表展示
-- 🏆 **成就系统** - 记录个人成就和目标进度
-- 💾 **数据同步** - 与 HealthKit 集成，同步健康数据
+## 功能 Features
 
-## 技术架构
+- 🌏 中英文双语支持 / Bilingual (Chinese/English)
+- 📱 响应式设计 / Responsive Design
+- 🎨 精美的视觉效果 / Beautiful Visual Effects
 
-- **UI框架**: SwiftUI
-- **架构模式**: MVVM-C (Model-View-ViewModel-Coordinator)
-- **数据持久化**: SwiftData
-- **依赖注入**: ServiceContainer
-- **响应式编程**: Combine
-- **健康数据**: HealthKit
-- **地图服务**: MapKit
+## 技术栈 Tech Stack
 
-## 项目结构
+- HTML5
+- CSS3
+- JavaScript
+- GitHub Pages
 
+## 本地开发 Local Development
+
+```bash
+# 克隆仓库 / Clone repository
+git clone https://github.com/WeiProduct/AITouchGrass.git
+
+# 进入项目目录 / Enter project directory
+cd AITouchGrass
+
+# 启动本地服务器 / Start local server
+cd docs
+python3 -m http.server 8000
+
+# 访问 / Visit: http://localhost:8000
 ```
-AITouchGrass/
-├── Modules/
-│   ├── Core/          # 核心模块：基础类、协议、服务
-│   ├── Home/          # 首页模块：仪表板、快速操作
-│   ├── Activity/      # 活动模块：活动跟踪、地图显示
-│   ├── Statistics/    # 统计模块：数据分析、图表
-│   └── Profile/       # 个人中心：用户信息、设置
-├── Assets.xcassets/   # 资源文件
-└── AITouchGrassApp.swift # 应用入口
-```
 
-## 运行项目
+---
 
-1. **环境要求**
-   - Xcode 15.0+
-   - iOS 17.0+
-   - macOS 14.0+
-
-2. **运行步骤**
-   ```bash
-   # 克隆项目
-   git clone [repository-url]
-   
-   # 打开项目
-   open AITouchGrass.xcodeproj
-   
-   # 在 Xcode 中:
-   # 1. 选择目标设备 (iPhone 模拟器)
-   # 2. 按 Cmd+R 运行
-   ```
-
-3. **首次运行**
-   - 应用会请求位置权限和健康数据权限
-   - 请允许所有权限以使用完整功能
-
-## 主要功能
-
-### 1. 首页
-- 查看今日活动统计
-- 天气信息显示
-- 快速开始新活动
-- 最近活动列表
-
-### 2. 活动跟踪
-- 选择运动类型（步行、跑步、骑行等）
-- 实时显示时间、距离、速度、卡路里
-- 地图显示当前位置和路线
-- 暂停/继续和停止功能
-
-### 3. 统计分析
-- 不同时间段的活动数据（周/月/年）
-- 多种图表类型切换
-- 活动类型分布
-- 每周进度跟踪
-
-### 4. 个人中心
-- 用户信息管理
-- 每日/每周目标设置
-- 成就系统
-- 应用设置
-
-## 注意事项
-
-- 模拟器上的 GPS 功能有限，建议使用真机测试
-- 首次使用需要授权位置和健康数据权限
-- 活动数据会自动同步到 HealthKit
-
-## 许可证
-
-本项目仅供学习和参考使用。
+© 2025 Wei Fu. All rights reserved.
